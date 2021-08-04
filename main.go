@@ -44,12 +44,18 @@ type Price struct {
 var client *mongo.Client
 
 func get_order(response http.ResponseWriter, request *http.Request) {
+	(response).Header().Set("Access-Control-Allow-Origin", "*")
 	//gets order from customer and adds it to db
 	response.Header().Add("content-type", "application/json")
 	// variable for store the order
 	var order Order
 	// get json object and decode it to varible
 	json.NewDecoder(request.Body).Decode(&order)
+	//to prevent adding wrong orders to collection
+	if order.CoffieName == "" || order.CoffieSize == "" {
+		json.NewEncoder(response).Encode("Coffie name or Coffie size cannot be empty")
+		return
+	}
 	//connect orders collection)
 	ordersCollection := client.Database("Özkahvem").Collection("orders")
 	//connect coffies collection
@@ -123,12 +129,11 @@ func main() {
 	//create router to navigate requests
 	router := mux.NewRouter()
 
-	router.HandleFunc("/getorder", get_order).Methods("POST")
-	router.HandleFunc("/listorders", list_orders).Methods("GET")
-	router.HandleFunc("/deliverorder", deliver_order).Methods("POST")
+	//"OPTION" added due to CORS's preflight
+	router.HandleFunc("/getorder", get_order).Methods("POST", "OPTIONS")
+	router.HandleFunc("/listorders", list_orders).Methods("GET", "OPTIONS")
+	router.HandleFunc("/deliverorder", deliver_order).Methods("POST", "OPTIONS")
 
 	//port to serve
 	http.ListenAndServe(":12345", router)
-
-	//pull and push test for new branch
 }
