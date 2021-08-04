@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"encoding/json"
+	"log"
 	"net/http"
 	"time"
 
@@ -80,6 +81,37 @@ func get_order(response http.ResponseWriter, request *http.Request) {
 	json.NewEncoder(response).Encode(result)
 }
 
+func list_orders(response http.ResponseWriter, request *http.Request) {
+	//endpoint to gel all unfinished orders
+	response.Header().Add("content-type", "application/json")
+	var orders []Order
+	ordersCollection := client.Database("Özkahvem").Collection("orders")
+	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
+	orderCursor, _ := ordersCollection.Find(ctx, bson.M{"IsDelivered": false})
+	orderCursor.All(ctx, &orders)
+	json.NewEncoder(response).Encode(orders)
+}
+
+func deliver_order(response http.ResponseWriter, request *http.Request) {
+	//finish order by id
+	response.Header().Add("content-type", "application/json")
+	var order Order
+	json.NewDecoder(request.Body).Decode(&order)
+	ordersCollection := client.Database("Özkahvem").Collection("orders")
+	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
+	result, err := ordersCollection.UpdateOne(
+		ctx,
+		bson.M{"_id": order.ID},
+		bson.D{
+			{"$set", bson.D{{"IsDelivered", true}}},
+		},
+	)
+	if err != nil {
+		log.Fatal(err)
+	}
+	json.NewEncoder(response).Encode(result)
+}
+
 func main() {
 	//db id: dbAdmin pwd: VcVaVK9Ku5v*gh$
 	clientOptions := options.Client().
@@ -91,8 +123,9 @@ func main() {
 	//create router to navigate requests
 	router := mux.NewRouter()
 
-	//routes
 	router.HandleFunc("/getorder", get_order).Methods("POST")
+	router.HandleFunc("/listorders", list_orders).Methods("GET")
+	router.HandleFunc("/deliverorder", deliver_order).Methods("POST")
 
 	//port to serve
 	http.ListenAndServe(":12345", router)
