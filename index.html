@@ -8,7 +8,31 @@
 </head>
 
 <body>
-    <input type="button" value="Give Order" onclick="send();" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <style>
+        th {
+            color: #fff;
+        }
+    </style>
+
+    <input type="button" class="btn btn-primary" value="Give Order" onclick="send();" /><br><br>
+
+    <table class="table table-striped">
+        <tr class="bg-info">
+            <th>Coffie Name</th>
+            <th>Coffie Size</th>
+            <th>Estimated Delivery Time</th>
+            <th>Order Time</th>
+            <th></th>
+        </tr>
+
+        <tbody id="ordersTable">
+
+        </tbody>
+    </table>
 
     <script>
         function send() {
@@ -23,7 +47,38 @@
         };
 
         const jsonString = JSON.stringify(coffie)
-        const xhr = new XMLHttpRequest();
+        const xhr = new XMLHttpRequest()
+
+        xhr.open("GET", "http://localhost:12345/listorders");
+        xhr.send();
+
+        xhr.onload = () => {
+            orders = JSON.parse(xhr.response)
+                // console.log(typeof orders[0]._id)
+            BuildOrdersTable(orders)
+        }
+
+        function BuildOrdersTable(data) {
+            var table = document.getElementById('ordersTable')
+
+            for (var i = 0; i < data.length; i++) {
+                var row = `<tr>
+							<td>${data[i].CoffieName}</td>
+							<td>${data[i].CoffieSize}</td>
+							<td>${data[i].EstimatedDeliveryTime}</td>
+							<td>${data[i].OrderTime}</td>
+							<td><input type="button" class="btn btn-primary" value="Complate Order" onclick="ComplateOrder(data[i]);" /></td>
+					        </tr>`
+                table.innerHTML += row
+            }
+        }
+
+        function ComplateOrder(order) {
+            console.log("complate order çalıştı")
+            xhr.open("POST", "http://localhost:12345/deliverorder")
+            xhr.setRequestHeader("Content-Type", "application/json")
+            xhr.send(order)
+        }
     </script>
 </body>
 
