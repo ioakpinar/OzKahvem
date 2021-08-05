@@ -62,25 +62,20 @@ func get_order(response http.ResponseWriter, request *http.Request) {
 	coffiesCollection := client.Database("Özkahvem").Collection("coffies")
 	//create db context object
 	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
-	// get all orders not yet delivered
-	orderCursor, _ := ordersCollection.Find(ctx, bson.M{"IsDelivered": false})
-	// create a slice to hold not delivered orders
-	var orders []Order
-	orderCursor.All(ctx, &orders)
+	// get last order not yet delivered
+	var lastOrder Order
+	//sort documents by descending id order and select first not delivered order to calculate delivery time
+	opts := options.FindOne()
+	opts.SetSort(bson.D{{"_id", -1}})
+	ordersCollection.FindOne(ctx, bson.D{{"IsDelivered", false}}, opts).Decode(&lastOrder)
 	//create a coffie object
 	var coffie Coffie
 	//get information of ordered coffie
 	coffiesCollection.FindOne(ctx, bson.M{"Name": order.CoffieName}).Decode(&coffie)
-	// variable for calculate total time remain
-	var totalTimeRemain int32
-	for _, order := range orders {
-		// total time remain before last order
-		totalTimeRemain += order.EstimatedDeliveryTime
-	}
-	// date time of order
+	// // date time of order
 	order.OrderTime = carbon.Now().ToDateTimeString()
 	// total time remain for this order
-	order.EstimatedDeliveryTime = totalTimeRemain + coffie.PrepTime
+	order.EstimatedDeliveryTime = lastOrder.EstimatedDeliveryTime + coffie.PrepTime
 	// insert it to orders collection
 	result, _ := ordersCollection.InsertOne(ctx, order)
 	// print out inserted order's id
