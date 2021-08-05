@@ -18,7 +18,14 @@
         }
     </style>
 
-    <input type="button" class="btn btn-primary" value="Give Order" onclick="send();" /><br><br>
+    <input type="button" class="btn btn-primary" value="white Chocolate Mocha" onclick="send(whiteChocolateMocha);" />
+    <input type="button" class="btn btn-primary" value="macchiato" onclick="send(macchiato);" />
+    <input type="button" class="btn btn-primary" value="latte" onclick="send(latte);" />
+    <input type="button" class="btn btn-primary" value="cool Lime" onclick="send(coolLime);" />
+    <input type="button" class="btn btn-primary" value="berry Hibiscus" onclick="send(berryHibiscus);" />
+    <input type="button" class="btn btn-primary" value="türk Kahvesi" onclick="send(türkKahvesi);" />
+    <input type="button" class="btn btn-primary" value="pumpkin Spice Latte" onclick="send(pumpkinSpiceLatte);" />
+    <input type="button" class="btn btn-primary" value="salted Caramel" onclick="send(saltedCaramel);" /><br><br>
 
     <table class="table table-striped">
         <tr class="bg-info">
@@ -35,18 +42,53 @@
     </table>
 
     <script>
-        function send() {
-            xhr.open("POST", "http://localhost:12345/getorder")
-            xhr.setRequestHeader("Content-Type", "application/json")
-            xhr.send(jsonString)
+        async function send(coffie) {
+            await _send(coffie)
+                //window.location.reload()
         }
 
-        const coffie = {
-            CoffieName: "Deneme Kahvesi",
+        async function _send(coffie) {
+            const order = JSON.stringify(coffie)
+            xhr.open("POST", "http://localhost:12345/getorder")
+            xhr.setRequestHeader("Content-Type", "application/json")
+            xhr.send(order)
+        }
+
+        const whiteChocolateMocha = {
+            CoffieName: "white chocolate mocha",
+            CoffieSize: "ultraMega"
+        };
+        const macchiato = {
+            CoffieName: "macchiato",
+            CoffieSize: "ultraMega"
+        };
+        const latte = {
+            CoffieName: "latte",
+            CoffieSize: "ultraMega"
+        };
+        const coolLime = {
+            CoffieName: "cool lime",
+            CoffieSize: "ultraMega"
+        };
+        const berryHibiscus = {
+            CoffieName: "berry hibiscus",
+            CoffieSize: "ultraMega"
+        };
+        const türkKahvesi = {
+            CoffieName: "türk kahvesi",
+            CoffieSize: "ultraMega"
+        };
+        const pumpkinSpiceLatte = {
+            CoffieName: "pumpkin spice latte",
+            CoffieSize: "ultraMega"
+        };
+        const saltedCaramel = {
+            CoffieName: "salted caramel",
             CoffieSize: "ultraMega"
         };
 
-        const jsonString = JSON.stringify(coffie)
+
+
         const xhr = new XMLHttpRequest()
 
         xhr.open("GET", "http://localhost:12345/listorders");
@@ -67,7 +109,7 @@
 							<td>${data[i].CoffieSize}</td>
 							<td>${data[i].EstimatedDeliveryTime}</td>
 							<td>${data[i].OrderTime}</td>
-							<td><input type="button" class="btn btn-primary" value="Complate Order" onclick="ComplateOrder(data[i]);" /></td>
+							<td><input type="button" class="btn btn-primary" value="Complate Order" onclick="ComplateOrder(${data[i]});" /></td>
 					        </tr>`
                 table.innerHTML += row
             }
