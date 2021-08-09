@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 	"time"
@@ -21,6 +22,7 @@ type Coffie struct {
 	Name     string             `json:"name,omitempty" bson:"name,omitempty"`
 	About    string             `json:"about,omitempty" bson:"about,omitempty"`
 	PrepTime int32              `json:"preptime,omitempty" bson:"preptime,omitempty"`
+	Prices   []int32            `json:"prices,omitempty" bson:"prices,omitempty"`
 }
 
 //Order struct definition (Model)
@@ -34,18 +36,17 @@ type Order struct {
 }
 
 //Price struct definition (Model)
-type Price struct {
-	ID         primitive.ObjectID `json:"_id,omitempty" bson:"_id,omitempty"`
-	CoffieName string             `json:"CoffieName,omitempty" bson:"CoffieName,omitempty"`
-	CoffieSize string             `json:"CoffieSize,omitempty" bson:"CoffieSize,omitempty"`
-	Cost       float32            `json:"Cost,omitempty" bson:"cost,omitempty"`
-}
+// type Price struct {
+// 	ID         primitive.ObjectID `json:"_id,omitempty" bson:"_id,omitempty"`
+// 	CoffieName string             `json:"CoffieName,omitempty" bson:"CoffieName,omitempty"`
+// 	CoffieSize string             `json:"CoffieSize,omitempty" bson:"CoffieSize,omitempty"`
+// 	Cost       float32            `json:"Cost,omitempty" bson:"cost,omitempty"`
+// }
 
 var client *mongo.Client
 
-func get_order(response http.ResponseWriter, request *http.Request) {
+func get_order(response http.ResponseWriter, request *http.Request) { //gets order from customer and adds it to db
 	(response).Header().Set("Access-Control-Allow-Origin", "*")
-	//gets order from customer and adds it to db
 	response.Header().Add("content-type", "application/json")
 	// variable for store the order
 	var order Order
@@ -66,8 +67,8 @@ func get_order(response http.ResponseWriter, request *http.Request) {
 	var lastOrder Order
 	//sort documents by descending id order and select first not delivered order to calculate delivery time
 	opts := options.FindOne()
-	opts.SetSort(bson.D{{"_id", -1}})
-	ordersCollection.FindOne(ctx, bson.D{{"IsDelivered", false}}, opts).Decode(&lastOrder)
+	opts.SetSort(bson.D{{Key: "_id", Value: -1}})
+	ordersCollection.FindOne(ctx, bson.D{{Key: "IsDelivered", Value: false}}, opts).Decode(&lastOrder)
 	//create a coffie object
 	var coffie Coffie
 	//get information of ordered coffie
@@ -104,13 +105,43 @@ func deliver_order(response http.ResponseWriter, request *http.Request) {
 		ctx,
 		bson.M{"_id": order.ID},
 		bson.D{
-			{"$set", bson.D{{"IsDelivered", true}}},
+			{"$set", bson.D{{Key: "IsDelivered", Value: true}}},
 		},
 	)
 	if err != nil {
 		log.Fatal(err)
 	}
 	json.NewEncoder(response).Encode(result)
+}
+
+func get_coffies(response http.ResponseWriter, request *http.Request) { // get all coffies with about and prices
+	response.Header().Add("content-type", "application/json")
+	var coffies []Coffie
+	coffiesCollection := client.Database("Özkahvem").Collection("coffies")
+	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
+	coffiesCursor, _ := coffiesCollection.Find(ctx, bson.M{})
+	coffiesCursor.All(ctx, &coffies)
+	fn0(coffies, coffiesCollection, ctx)
+	json.NewEncoder(response).Encode(coffies)
+}
+
+func fn0(coffies []Coffie, coffiesCollection *mongo.Collection, ctx context.Context) { // update all data in coffies
+	var prices []int32
+	prices = append(prices, 12, 15, 18)
+	for _, coffie := range coffies {
+
+		result, err := coffiesCollection.UpdateOne(
+			ctx,
+			bson.M{"_id": coffie.ID},
+			bson.D{
+				{"$set", bson.D{{"prices", prices}}},
+			},
+		)
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Println(coffie, result)
+	}
 }
 
 func main() {
@@ -128,6 +159,7 @@ func main() {
 	router.HandleFunc("/getorder", get_order).Methods("POST", "OPTIONS")
 	router.HandleFunc("/listorders", list_orders).Methods("GET", "OPTIONS")
 	router.HandleFunc("/deliverorder", deliver_order).Methods("POST", "OPTIONS")
+	router.HandleFunc("/getcoffies", get_coffies).Methods("GET", "OPTIONS")
 
 	//port to serve
 	http.ListenAndServe(":12345", router)
