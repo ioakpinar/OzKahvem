@@ -1,0 +1,58 @@
+.rightCard {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 3rem;
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+}
+
+@media (max-width: 55rem) {
+    .rightCard {
+        flex-direction: column-reverse;
+        align-items: flex-start;
+    }
+}
+
+.rightCard__right {
+}
+
+@media (max-width: 55rem) {
+    .rightCard__right {
+        margin-bottom: 3rem;
+    }
+}
+
+.rightCard__right h2 {
+    margin-bottom: 1rem;
+    max-width: 30rem;
+}
+
+.rightCard__right h2 span {
+    color: var(--main-color);
+}
+
+.rightCard__right p span {
+    color: var(--main-color);
+    font-weight: var(--bold);
+}
+
+.rightCard__left {
+    position: relative;
+}
+
+.rightCard__left span {
+    position: absolute;
+    left: 20px;
+    bottom: 20px;
+    width: 100%;
+    height: 100%;
+    background: var(--main-color);
+    z-index: -1;
+}
+
+.rightCard__left img {
+    max-width: 100%;
+    height: 30rem;
+    object-fit: cover;
+}

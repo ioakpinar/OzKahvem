@@ -1,0 +1,53 @@
+.leftCard {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 3rem;
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+}
+
+@media (max-width: 55rem) {
+    .leftCard {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+.leftCard__left {
+}
+
+@media (max-width: 55rem) {
+    .leftCard__left {
+        margin-bottom: 3rem;
+    }
+}
+
+.leftCard__left h2 {
+    margin-bottom: 1rem;
+    max-width: 30rem;
+}
+
+.leftCard__left h2 span {
+    color: var(--main-color);
+}
+
+.leftCard__right {
+    position: relative;
+}
+
+.leftCard__right span {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    width: 100%;
+    height: 100%;
+    background: var(--main-color);
+    z-index: -1;
+}
+
+.leftCard__right img {
+    max-width: 100%;
+    height: 30rem;
+    object-fit: cover;
+}

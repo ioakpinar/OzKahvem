@@ -1,0 +1,66 @@
+[
+    {
+        "id": 1,
+        "name": "Türk Kahvesi",
+        "description": "Kahve üretmediği halde bir ürünü kendine özgü bir pişirim tekniğiyle hazırlayıp kendi kültürü ile özdeşleştirmiş bir kahve çeşidi. Kendisine has kahve öğütme yöntemiyle ince çekilmiş kahveyle hazırlanan Türk kahvesi, kendine özel bardağı ve yanında lokum ve suyla servis edilir.",
+        "image": "https://images.unsplash.com/photo-1556667356-3452717120a0?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80",
+        "time": 5
+    },
+
+    {
+        "id": 2,
+        "name": "Espresso",
+        "description": "Eğer koyu kahve seviyorsanız espresso tam size göre bir seçim olacaktır. İnce çekilmiş kahvenin belli bir oranda basınç ve yüksek sıcaklığa maruz bırakılmasıyla elde edilen, tüketimi de hazırlanması da hızlı kahve türüdür. Türk kahvesine benzer minik fincanlarda servis edilir fakat telvesi yoktur, üzerinde az bir köpüğü bulunur. Genellikle içtiğimiz kahvelerin hepsi espresso üzerine farklı oranlarda su ve süt koyularak hazırlanmaktadır.",
+        "image": "https://images.unsplash.com/photo-1485808191679-5f86510681a2?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1868&q=80",
+        "time": 5
+    },
+    {
+        "id": 3,
+        "name": "Filtre Kahve",
+        "description": "Orta çekilmiş kahvenin kağıt veya metal filtreden geçirilip yavaş yavaş süzülmesiyle elde edilir. Tercihe göre sütlü, kremalı, şekerli tüketilebilir.",
+        "image": "https://images.unsplash.com/photo-1504627298434-2119d6928e93?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=334&q=80",
+        "time": 5
+    },
+    {
+        "id": 4,
+        "name": "Caffe Latte",
+        "description": "Cafe Latte, yumuşak içimi nedeniyle kahve ile arası olmayanların bile hemen seveceği bir kahve çeşidi. Tek ya da iki shot espresso üzerine süt eklenmesi ile hazırlanır. İsteğe bağlı olarak süt köpüğü de eklenebilir. En çok karıştırılan bir başka çeşit olan Cappuccino’dan daha az köpüklü olmasıyla ayrılır.",
+        "image": "https://images.unsplash.com/photo-1571265391438-3c65bb109b98?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=400&q=80",
+        "time": 5
+    },
+    {
+        "id": 5,
+        "name": "Macchiato",
+        "description": "Bazıları espressolarında ufak bir süt dokunuşunu severler. Macchiato da kahvesini bu tarz sevenler için ideal. Tek ya da iki shot espresso üzerine ufak bir miktar süt köpüğü eklenerek adının İtalyanca anlamıyla uyumlu olarak yani küçük bir benek oluşturarak servis edilir.",
+        "image": "https://images.unsplash.com/photo-1519091830432-41608a52904e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=334&q=80",
+        "time": 5
+    },
+    {
+        "id": 6,
+        "name": "Cappuccino",
+        "description": "Cappuccino, Latte’nin hemen hemen aynısı sadece daha az sütlü ve daha fazla köpüklüsüdür. İçindeki espresso, süt ve süt köpüğünün hacimleri birbirine eşittir.",
+        "image": "https://images.unsplash.com/photo-1572097662444-003d63fe5884?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=375&q=80",
+        "time": 5
+    },
+    {
+        "id": 7,
+        "name": "Americano",
+        "description": "Americano da yine espresso gibi koyu kahve sevenler için başka bir tercih. İkinci dünya savaşı sırasında espresso ile tanışan Amerikalılar, bu sert kahveyi üzerine su karıştırarak tüketmeyi tercih etmişler, kahve çeşidinin adı da buradan geliyor. Bir veya iki shot espresso üzerine kaynar su eklenmesiyle hazırlanan kahve türüdür.",
+        "image": "https://images.unsplash.com/photo-1614680551201-a78c38cf943d?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=334&q=80",
+        "time": 5
+    },
+    {
+        "id": 8,
+        "name": "Mocha",
+        "description": "Acı kahve içmek istemeyen ve kahvesinde tatlı aromaları sevenler için ideal bir tercih Mocha. 2 shot espresso, 2 shot çikolata şurubu veya sıcak çikolata tozu ve süt köpüğü ile hazırlanarak servis edilir.",
+        "image": "https://images.unsplash.com/photo-1587271562613-72ac8950aac2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=334&q=80",
+        "time": 5
+    },
+    {
+        "id": 9,
+        "name": "Flat White",
+        "description": "Sütlü kahve içmesini seviyor ama çok fazla kahve içiyorsanız bir taraftan da ek kalori çıkmasın istiyorsanız az sütlü olan bu kahvemizi tercih edebilirsiniz. Latte’den daha küçük bardaklarda servis edildiği için içindeki süt miktarı daha az ve süt köpüğü bulundurmaz.",
+        "image": "https://static.wixstatic.com/media/aa26ca_f0e042edbde04eaf8b64f29e83f215a8~mv2.jpg",
+        "time": 5
+    }
+]

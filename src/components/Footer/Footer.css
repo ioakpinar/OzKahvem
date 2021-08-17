@@ -1,0 +1,90 @@
+.footer {
+    width: 100%;
+    position: relative;
+    background-color: var(--main-color);
+    color: var(--white);
+    padding: 4rem 0;
+    margin-top: 7.5rem;
+    z-index: 0;
+}
+
+.footer::before {
+    position: absolute;
+    content: "";
+    top: calc(-5rem + 1px);
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 5rem;
+    clip-path: polygon(100% 45%, 0 100%, 100% 100%); /* footer'daki eğimi yapmamızı sağlayan kod */
+    background-color: var(--main-color);
+    z-index: 5;
+}
+
+.footer .footer__navbar {
+    width: 100%;
+}
+
+.footer .footer__links {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.footer__body {
+    text-align: center;
+    margin-top: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+@media (max-width: 55rem) {
+    .footer .footer__navbar .footer__menu .footer__links {
+        flex-direction: column;
+        text-align: center;
+    }
+}
+
+@media (max-width: 55rem) {
+    .footer
+        .footer__navbar
+        .footer__menu
+        .footer__links
+        .footer__link:not(:last-child) {
+        margin-right: 0;
+        margin-bottom: 1.5rem;
+    }
+}
+
+.footer__navbar .footer__menu .footer__links .footer__link:not(:last-child) {
+    margin-right: 3rem;
+}
+
+.footer .footer__navbar .footer__menu .footer__links .footer__link a {
+    color: var(--white);
+    font-weight: var(--bold);
+    font-size: var(--menu-text);
+}
+
+.footer .footer__navbar .footer__menu .footer__links .footer__logoLink p {
+    font-family: "MonteCarlo";
+    font-size: 3rem;
+}
+
+@media (max-width: 55rem) {
+    .footer .footer__navbar .footer__menu .footer__links .footer__link a {
+        font-size: var(--mobile-menu);
+    }
+}
+
+p {
+    max-width: 30rem;
+}
+
+small {
+    font-weight: var(--bold);
+    opacity: 0.7;
+    margin-top: 2rem;
+}

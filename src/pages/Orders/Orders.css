@@ -1,0 +1,49 @@
+.orders {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 8.5rem);
+  width: 100%;
+  padding-top: 5rem;
+}
+.orders__table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.orders th {
+  background-color: var(--main-color);
+  color: var(--white);
+}
+
+.orders__table th,
+.orders td {
+  text-align: left;
+  border: 1px solid #ddd;
+}
+
+.orders__table tr td,
+.orders__table tr th {
+  padding: 0.5rem 0.5rem;
+}
+
+.orders__table td {
+  text-transform: capitalize;
+}
+
+/* Hover */
+.orders__table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.orders__table tr:hover {
+  background-color: #ddd;
+}
+
+/* Button */
+.orders__button {
+  padding: 0.25rem 0.25rem;
+  background-color: var(--main-color);
+  color: var(--white);
+  width: 100%;
+}

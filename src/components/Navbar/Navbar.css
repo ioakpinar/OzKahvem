@@ -1,0 +1,150 @@
+.navbar {
+  padding: 2rem 0;
+  background-color: var(--main-color);
+}
+
+.navbar .menu {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Navbar görünümünü ayarlıyoruz */
+.navbar .menu .links {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.navbar .menu .links .link:not(:last-child) {
+  margin-right: 5rem;
+}
+
+.navbar .menu .links .logoLink p {
+  font-family: "MonteCarlo";
+  font-size: 3rem;
+}
+
+@media (max-width: 55rem) {
+  .navbar .menu .links .link:not(:last-child) {
+    margin-right: 0;
+    margin-right: 1rem;
+  }
+}
+
+.navbar .menu .links .link a {
+  color: var(--white);
+  font-weight: var(--bold);
+  font-size: var(--menu-text);
+}
+
+@media (max-width: 55rem) {
+  .navbar .menu .links .link a {
+    font-size: var(--mobile-menu);
+  }
+}
+
+/* Menü elemanları üzerine gelince altında çizgi çıkmasını sağlayan kod.*/
+.navbar .menu .links .link a:hover {
+  border-bottom: 2px solid var(--white);
+}
+
+@media (max-width: 55rem) {
+  .navbar__main {
+    position: relative;
+    height: 100%;
+  }
+
+  .navbar-open {
+    margin-top: 0;
+    position: fixed;
+    z-index: 99;
+    height: 100vh;
+    width: 100%;
+    background-color: var(--main-color);
+  }
+
+  .navbar .menu {
+    display: none;
+  }
+
+  .navbar .menu-open {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .navbar .menu-open .links {
+    flex-direction: column;
+  }
+
+  @media (max-width: 55rem) {
+    .navbar .menu-open .links .link a {
+      color: var(--white);
+    }
+  }
+
+  @media (max-width: 55rem) {
+    .navbar .menu-open .links .link:not(:last-child) {
+      margin-right: 0;
+      margin-bottom: 2rem;
+    }
+  }
+
+  /* Hamburger İşlemleri */
+  /* Hamburger */
+  .hamburger {
+    position: relative;
+    width: 24px;
+    height: 16px;
+    cursor: pointer; /* imleç */
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .hamburger span {
+    width: 24px;
+    height: 3px;
+    background: var(--white);
+    transition: 0.3s ease-in-out;
+  }
+
+  .hamburger span::before,
+  .hamburger span::after {
+    content: "";
+    position: absolute;
+    width: 24px;
+    height: 3px;
+    background: var(--white);
+    transition: 0.3s ease-in-out;
+  }
+
+  .hamburger span::before {
+    transform: translateY(-6.5px);
+  }
+
+  .hamburger span::after {
+    transform: translateY(6.5px);
+  }
+
+  .hamburger-open {
+    top: 0;
+  }
+
+  .hamburger-open span {
+    background: transparent; /* hamburger menüye tıklandığı zaman ortadaki çizgi görünmez oluyor */
+  }
+
+  .hamburger-open span::before {
+    transform: rotate(45deg);
+    background-color: var(--white);
+  }
+
+  .hamburger-open span::after {
+    transform: rotate(-45deg);
+    background-color: var(--white);
+  }
+}

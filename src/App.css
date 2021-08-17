@@ -1,0 +1,143 @@
+/* Fonts */
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=MonteCarlo&display=swap");
+
+/* Reset CSS */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Fontların okunaklığını artırıyoruz. */
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+p,
+small {
+  line-height: 1.5;
+}
+
+ul {
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+}
+
+input,
+input::placeholder,
+button,
+table {
+  font-family: "Playfair Display", serif;
+}
+
+/* Smooth Scroll */
+html {
+  scroll-behavior: smooth;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+/* Font */
+html,
+body {
+  font-family: "Playfair Display", serif;
+}
+
+/* Container */
+.container {
+  max-width: calc(64rem + 3rem)
+    /* contaner içeriğinin tam 64rem(1024px) olması için gereken hesaplama */;
+  width: 100%;
+  margin: 0 auto; /* container içindeki her elemanın ortalanmasını sağlayan kod */
+  padding: 0 1.5rem;
+}
+
+/* Root Variables */
+:root {
+  /* Colors */
+  --main-color: #dda461;
+  --white: #fff;
+  --black: #000;
+
+  /* Font */
+  --headline-title: 3.75rem;
+  --second-headline: 3.125rem;
+  --headline-body: 1.5rem;
+  --menu-text: 1.125rem;
+  --body-text: 1rem;
+  --button-text: 1.125rem;
+  --mobile-menu: 1rem;
+  --bold: bold;
+}
+
+@media (max-width: 55rem) {
+  :root {
+    --headline-title: 3.125rem;
+    --second-headline: 2.5rem;
+  }
+}
+
+/* Colors */
+/* DDA461 */
+/* FFFFFF */
+/* 000000 */
+
+/* Font Variables*/
+/* Headline 60px Bold */
+h1 {
+  font-size: var(--headline-title);
+}
+
+h2 {
+  font-size: var(--second-headline);
+}
+
+button {
+  font-size: var(--button-text);
+}
+
+/* Second Headline 50px */
+/* Headline Body 24px */
+/* Menu Text 18px Bold */
+/* Body Text 16px */
+/* Button 24px Bold */
+
+/* Global Buttons */
+button {
+  border: 0;
+  outline: 0;
+  font-family: "Playfair Display", serif;
+  cursor: pointer; /* imleci ayarlıyor */
+}
+
+.largeButton {
+  padding: 0.5rem 1rem;
+}
+
+/* Animations */
+@keyframes easeInOut {
+  0% {
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  100% {
+    visibility: visible;
+    opacity: 1;
+  }
+}

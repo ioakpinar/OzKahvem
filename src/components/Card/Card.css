@@ -1,0 +1,179 @@
+.card {
+    position: relative;
+    width: 20rem;
+    height: 26rem;
+    padding: 1.5rem;
+    color: var(--white);
+    z-index: 1;
+}
+
+.card img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* aspect ratio */
+    z-index: 2;
+}
+/* before selector */
+.card::before {
+    position: absolute;
+    content: "";
+    width: 100%;
+    height: 100%;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.4) 0%, #000000 100%);
+    z-index: 3;
+}
+
+.card__content {
+    /* Kartın içeriği */
+    position: relative;
+    height: 100%;
+    width: 100%;
+    z-index: 99;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+.card__price {
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: none;
+    animation: easeInOut 0.5s ease-in-out;
+}
+
+.card__price div {
+    display: flex;
+    align-items: center;
+    background-color: var(--main-color);
+    justify-content: center;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50vw;
+}
+
+.card__price p {
+    font-weight: var(--bold);
+}
+
+.card__top p {
+    overflow-y: scroll;
+    max-height: 6rem;
+}
+
+.card__top p::-webkit-scrollbar {
+    /* Scrollbar'ı yok etmeye yarayan kod */
+    display: none;
+}
+
+.card__bottom {
+    display: none;
+    margin-top: 1.5rem;
+    animation: easeInOut 0.5s ease-in-out;
+}
+
+.card:hover .card__bottom {
+    display: block;
+}
+
+.card__sizes {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.card__sizes p {
+    margin-bottom: 0.5rem;
+    font-weight: var(--bold);
+}
+
+.small,
+.medium,
+.large {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.card__desc {
+    opacity: 0.4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+input:checked + .card__desc {
+    opacity: 1;
+}
+
+.small span,
+.medium span,
+.large span {
+    position: relative;
+    width: 2rem;
+    height: 5rem;
+    background: var(--white);
+    z-index: 0;
+}
+
+.small span::before {
+    position: absolute;
+    content: "";
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 2rem;
+    height: 2.5rem;
+    background: var(--main-color);
+    z-index: 1;
+}
+
+.medium span::before {
+    position: absolute;
+    content: "";
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 2rem;
+    height: 3.5rem;
+    background: var(--main-color);
+    z-index: 1;
+}
+
+.large span::before {
+    position: absolute;
+    content: "";
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 2rem;
+    height: 5rem;
+    background: var(--main-color);
+    z-index: 1;
+}
+
+.card__button {
+    background-color: var(--main-color);
+    color: var(--white);
+    margin-top: 1.5rem;
+    width: 100%;
+    display: none;
+    animation: easeInOut 0.5s ease-in-out;
+}
+
+.display {
+    display: block;
+}

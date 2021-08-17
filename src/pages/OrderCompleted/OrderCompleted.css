@@ -1,0 +1,80 @@
+.orderCompleted {
+  position: relative;
+  background: url("https://images.unsplash.com/photo-1447933601403-0c6688de566e?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1256&q=80")
+    no-repeat center center / cover;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  z-index: 0;
+}
+
+.orderCompleted::before {
+  position: absolute;
+  content: "";
+  background-color: #000;
+  opacity: 0.4;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  z-index: 1;
+}
+
+.orderCompleted h1,
+.orderCompleted h2 {
+  text-transform: capitalize;
+}
+
+.orderCompleted__body {
+  position: relative;
+  z-index: 99;
+  color: #fff;
+}
+
+.orderCompleted__body h2 {
+  font-family: "MonteCarlo";
+  font-size: 5rem;
+}
+
+.orderCompleted__body h3 {
+  font-size: 3rem;
+}
+
+.orderCompleted p {
+  max-width: 100%;
+  text-align: center;
+  font-size: 2rem;
+}
+
+.orderCompleted .orderCompleted__button {
+  margin-top: 2rem;
+  padding: 0 0;
+  padding: 1rem 2rem;
+  background-color: var(--main-color);
+  color: var(--white);
+}
+
+/* spans */
+.orderCompleted .left {
+  position: absolute;
+  width: 22.5rem;
+  height: 100%;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  background: linear-gradient(90deg, #000000 0%, rgba(0, 0, 0, 0.1) 100%);
+  z-index: 2;
+}
+
+.orderCompleted .right {
+  position: absolute;
+  width: 22.5rem;
+  height: 100%;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  background: linear-gradient(90deg, rgba(0, 0, 0, 0.1) 0%, #000000 100%);
+  z-index: 2;
+}
