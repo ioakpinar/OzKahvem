@@ -18,21 +18,24 @@ import (
 
 //Coffie struct definition (Model)
 type Coffie struct {
-	ID       primitive.ObjectID `json:"_id,omitempty" bson:"_id,omitempty"`
-	Name     string             `json:"name,omitempty" bson:"name,omitempty"`
-	About    string             `json:"about,omitempty" bson:"about,omitempty"`
-	PrepTime int32              `json:"preptime,omitempty" bson:"preptime,omitempty"`
-	Prices   []int32            `json:"prices,omitempty" bson:"prices,omitempty"`
+	ID          primitive.ObjectID `json:"_id,omitempty" bson:"_id,omitempty"`
+	Id          int32              `json:"id,omitempty" bson:"id,omitempty"`
+	Name        string             `json:"name,omitempty" bson:"name,omitempty"`
+	Description string             `json:"description,omitempty" bson:"description,omitempty"`
+	Image       string             `json:"image,omitempty" bson:"image,omitempty"`
+	Time        int32              `json:"time,omitempty" bson:"time,omitempty"`
+	//Prices   	   []int32            `json:"prices,omitempty" bson:"prices,omitempty"`
 }
 
 //Order struct definition (Model)
 type Order struct {
 	ID                    primitive.ObjectID `json:"_id,omitempty" bson:"_id,omitempty"`
-	CoffieName            string             `json:"CoffieName,omitempty" bson:"CoffieName,omitempty"`
-	CoffieSize            string             `json:"CoffieSize,omitempty" bson:"CoffieSize,omitempty"`
-	IsDelivered           bool               `json:"IsDelivered" bson:"IsDelivered"`
-	EstimatedDeliveryTime int32              `json:"EstimatedDeliveryTime,omitempty" bson:"EstimatedDeliveryTime,omitempty"`
-	OrderTime             string             `json:"OrderTime" bson:"OrderTime"`
+	SId                   string
+	CoffieName            string `json:"CoffieName,omitempty" bson:"CoffieName,omitempty"`
+	CoffieSize            string `json:"CoffieSize,omitempty" bson:"CoffieSize,omitempty"`
+	IsDelivered           bool   `json:"IsDelivered" bson:"IsDelivered"`
+	EstimatedDeliveryTime int32  `json:"EstimatedDeliveryTime,omitempty" bson:"EstimatedDeliveryTime,omitempty"`
+	OrderTime             string `json:"OrderTime" bson:"OrderTime"`
 }
 
 //Price struct definition (Model)
@@ -52,6 +55,7 @@ func get_order(response http.ResponseWriter, request *http.Request) { //gets ord
 	var order Order
 	// get json object and decode it to varible
 	json.NewDecoder(request.Body).Decode(&order)
+	fmt.Println("order ", order)
 	//to prevent adding wrong orders to collection
 	if order.CoffieName == "" || order.CoffieSize == "" {
 		json.NewEncoder(response).Encode("Coffie name or Coffie size cannot be empty")
@@ -72,11 +76,12 @@ func get_order(response http.ResponseWriter, request *http.Request) { //gets ord
 	//create a coffie object
 	var coffie Coffie
 	//get information of ordered coffie
-	coffiesCollection.FindOne(ctx, bson.M{"Name": order.CoffieName}).Decode(&coffie)
+	coffiesCollection.FindOne(ctx, bson.M{"name": order.CoffieName}).Decode(&coffie)
+	fmt.Println(coffie)
 	// // date time of order
 	order.OrderTime = carbon.Now().ToDateTimeString()
 	// total time remain for this order
-	order.EstimatedDeliveryTime = lastOrder.EstimatedDeliveryTime + coffie.PrepTime
+	order.EstimatedDeliveryTime = lastOrder.EstimatedDeliveryTime + coffie.Time
 	// insert it to orders collection
 	result, _ := ordersCollection.InsertOne(ctx, order)
 	// print out inserted order's id
@@ -99,6 +104,8 @@ func deliver_order(response http.ResponseWriter, request *http.Request) {
 	response.Header().Add("content-type", "application/json")
 	var order Order
 	json.NewDecoder(request.Body).Decode(&order)
+	oid, err := primitive.ObjectIDFromHex(order.SId)
+	order.ID = oid
 	ordersCollection := client.Database("Özkahvem").Collection("orders")
 	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
 	result, err := ordersCollection.UpdateOne(
@@ -121,7 +128,8 @@ func get_coffies(response http.ResponseWriter, request *http.Request) { // get a
 	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
 	coffiesCursor, _ := coffiesCollection.Find(ctx, bson.M{})
 	coffiesCursor.All(ctx, &coffies)
-	fn0(coffies, coffiesCollection, ctx)
+	// fn0(coffies, coffiesCollection, ctx)
+	fmt.Println(coffies)
 	json.NewEncoder(response).Encode(coffies)
 }
 
@@ -144,14 +152,34 @@ func fn0(coffies []Coffie, coffiesCollection *mongo.Collection, ctx context.Cont
 	}
 }
 
+func get_time(response http.ResponseWriter, request *http.Request) {
+	fmt.Println("fonk çalıştı")
+	response.Header().Add("content-type", "application/json")
+	ordersCollection := client.Database("Özkahvem").Collection("orders")
+	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
+	var lastOrder Order
+	opts := options.FindOne()
+	opts.SetSort(bson.D{{Key: "_id", Value: -1}})
+	ordersCollection.FindOne(ctx, bson.D{{Key: "IsDelivered", Value: false}}, opts).Decode(&lastOrder)
+	fmt.Println(lastOrder)
+	json.NewEncoder(response).Encode(lastOrder.EstimatedDeliveryTime)
+}
+
 func main() {
-	//db id: dbAdmin pwd: VcVaVK9Ku5v*gh$
+	//db id: dbAdmin pwd: VcVaVK9Ku5v
 	clientOptions := options.Client().
-		ApplyURI("mongodb+srv://dbAdmin:VcVaVK9Ku5v*gh$@cluster0.ytljy.gcp.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
+		ApplyURI("mongodb+srv://dbAdmin:VcVaVK9Ku5v@cluster0.ytljy.gcp.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	client, _ = mongo.Connect(ctx, clientOptions)
+
+	databases, err := client.ListDatabaseNames(ctx, bson.M{})
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(databases)
+
 	//create router to navigate requests
 	router := mux.NewRouter()
 
@@ -160,6 +188,7 @@ func main() {
 	router.HandleFunc("/listorders", list_orders).Methods("GET", "OPTIONS")
 	router.HandleFunc("/deliverorder", deliver_order).Methods("POST", "OPTIONS")
 	router.HandleFunc("/getcoffies", get_coffies).Methods("GET", "OPTIONS")
+	router.HandleFunc("/gettime", get_time).Methods("GET", "OPTIONS")
 
 	//port to serve
 	http.ListenAndServe(":12345", router)
