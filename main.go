@@ -30,12 +30,13 @@ type Coffie struct {
 //Order struct definition (Model)
 type Order struct {
 	ID                    primitive.ObjectID `json:"_id,omitempty" bson:"_id,omitempty"`
-	SId                   string
-	CoffieName            string `json:"CoffieName,omitempty" bson:"CoffieName,omitempty"`
-	CoffieSize            string `json:"CoffieSize,omitempty" bson:"CoffieSize,omitempty"`
-	IsDelivered           bool   `json:"IsDelivered" bson:"IsDelivered"`
-	EstimatedDeliveryTime int32  `json:"EstimatedDeliveryTime,omitempty" bson:"EstimatedDeliveryTime,omitempty"`
-	OrderTime             string `json:"OrderTime" bson:"OrderTime"`
+	Oid                   int32              `json:"oid,omitempty" bson:"oid,omitempty"`
+	SId                   string             `json:"sid,omitempty" bson:"sid,omitempty"`
+	CoffieName            string             `json:"CoffieName,omitempty" bson:"CoffieName,omitempty"`
+	CoffieSize            string             `json:"CoffieSize,omitempty" bson:"CoffieSize,omitempty"`
+	IsDelivered           bool               `json:"IsDelivered" bson:"IsDelivered"`
+	EstimatedDeliveryTime int32              `json:"EstimatedDeliveryTime,omitempty" bson:"EstimatedDeliveryTime,omitempty"`
+	OrderTime             string             `json:"OrderTime" bson:"OrderTime"`
 }
 
 //Price struct definition (Model)
@@ -77,15 +78,19 @@ func get_order(response http.ResponseWriter, request *http.Request) { //gets ord
 	var coffie Coffie
 	//get information of ordered coffie
 	coffiesCollection.FindOne(ctx, bson.M{"name": order.CoffieName}).Decode(&coffie)
-	fmt.Println(coffie)
+	if lastOrder.Oid < 0 || lastOrder.Oid > 999 {
+		order.Oid = 1
+	} else {
+		order.Oid = lastOrder.Oid + 1
+	}
 	// // date time of order
 	order.OrderTime = carbon.Now().ToDateTimeString()
 	// total time remain for this order
 	order.EstimatedDeliveryTime = lastOrder.EstimatedDeliveryTime + coffie.Time
 	// insert it to orders collection
-	result, _ := ordersCollection.InsertOne(ctx, order)
+	ordersCollection.InsertOne(ctx, order)
 	// print out inserted order's id
-	json.NewEncoder(response).Encode(result)
+	json.NewEncoder(response).Encode(order.Oid)
 }
 
 func list_orders(response http.ResponseWriter, request *http.Request) {
@@ -153,16 +158,18 @@ func fn0(coffies []Coffie, coffiesCollection *mongo.Collection, ctx context.Cont
 }
 
 func get_time(response http.ResponseWriter, request *http.Request) {
-	fmt.Println("fonk çalıştı")
 	response.Header().Add("content-type", "application/json")
 	ordersCollection := client.Database("Özkahvem").Collection("orders")
+	var oid int32 = 0
+	json.NewDecoder(request.Body).Decode(&oid)
+	if oid == 0 {
+		json.NewEncoder(response).Encode("oid is empty")
+		return
+	}
 	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
-	var lastOrder Order
-	opts := options.FindOne()
-	opts.SetSort(bson.D{{Key: "_id", Value: -1}})
-	ordersCollection.FindOne(ctx, bson.D{{Key: "IsDelivered", Value: false}}, opts).Decode(&lastOrder)
-	fmt.Println(lastOrder)
-	json.NewEncoder(response).Encode(lastOrder.EstimatedDeliveryTime)
+	var order Order
+	ordersCollection.FindOne(ctx, bson.D{{Key: "oid", Value: oid}}).Decode(&order)
+	json.NewEncoder(response).Encode(carbon.Parse(carbon.Now().ToDateTimeString()).DiffInHours(carbon.Parse(order.OrderTime)))
 }
 
 func main() {
@@ -188,7 +195,7 @@ func main() {
 	router.HandleFunc("/listorders", list_orders).Methods("GET", "OPTIONS")
 	router.HandleFunc("/deliverorder", deliver_order).Methods("POST", "OPTIONS")
 	router.HandleFunc("/getcoffies", get_coffies).Methods("GET", "OPTIONS")
-	router.HandleFunc("/gettime", get_time).Methods("GET", "OPTIONS")
+	router.HandleFunc("/gettime", get_time).Methods("POST", "OPTIONS")
 
 	//port to serve
 	http.ListenAndServe(":12345", router)
