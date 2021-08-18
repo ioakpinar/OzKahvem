@@ -37,6 +37,7 @@ type Order struct {
 	IsDelivered           bool               `json:"IsDelivered" bson:"IsDelivered"`
 	EstimatedDeliveryTime int32              `json:"EstimatedDeliveryTime,omitempty" bson:"EstimatedDeliveryTime,omitempty"`
 	OrderTime             string             `json:"OrderTime" bson:"OrderTime"`
+	DeliveryTime          string             `json:"DeliveryTime" bson:"DeliveryTime"`
 }
 
 //Price struct definition (Model)
@@ -78,18 +79,23 @@ func get_order(response http.ResponseWriter, request *http.Request) { //gets ord
 	var coffie Coffie
 	//get information of ordered coffie
 	coffiesCollection.FindOne(ctx, bson.M{"name": order.CoffieName}).Decode(&coffie)
+	//check if no orders active right now
 	if lastOrder.Oid < 0 || lastOrder.Oid > 999 {
+		//if there is not start from 1
 		order.Oid = 1
 	} else {
+		//if there is plus 1 and go on
 		order.Oid = lastOrder.Oid + 1
 	}
 	// // date time of order
 	order.OrderTime = carbon.Now().ToDateTimeString()
 	// total time remain for this order
 	order.EstimatedDeliveryTime = lastOrder.EstimatedDeliveryTime + coffie.Time
+	//add estimatedDeliveryTime to order time to calculate delivery time
+	order.DeliveryTime = carbon.Parse(order.OrderTime).AddMinutes(int(order.EstimatedDeliveryTime)).ToDateTimeString()
 	// insert it to orders collection
 	ordersCollection.InsertOne(ctx, order)
-	// print out inserted order's id
+	// send order id
 	json.NewEncoder(response).Encode(order.Oid)
 }
 
@@ -169,7 +175,7 @@ func get_time(response http.ResponseWriter, request *http.Request) {
 	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
 	var order Order
 	ordersCollection.FindOne(ctx, bson.D{{Key: "oid", Value: oid}}).Decode(&order)
-	json.NewEncoder(response).Encode(carbon.Parse(carbon.Now().ToDateTimeString()).DiffInHours(carbon.Parse(order.OrderTime)))
+	json.NewEncoder(response).Encode(carbon.Parse(carbon.Now().ToDateTimeString()).DiffInHours(carbon.Parse(order.DeliveryTime)))
 }
 
 func main() {
