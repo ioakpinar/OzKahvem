@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import "./Card.css";
 import "./Card2.css";
 
@@ -8,6 +8,8 @@ export default function Card({ name, description, image, cardId, time }) {
   const [price, setPrice] = useState(0);
   const [size, setSize] = useState();
   const [display, setDisplay] = useState(false);
+
+  const history = useHistory();
 
   const getOrder = async () => {
     const requestOptions = {
@@ -20,6 +22,8 @@ export default function Card({ name, description, image, cardId, time }) {
       requestOptions
     );
     const data = await response.json();
+
+    history.push(`/order-no/${data}`);
   };
 
   const handleClick = (e) => {
@@ -99,16 +103,15 @@ export default function Card({ name, description, image, cardId, time }) {
                   </div>
                 </div>
               </div>
-              <Link to="/order-completed">
-                <button
-                  className={`card__button largeButton${
-                    // Tıklanmaya göre butonun gösterilmesi.
-                    display ? " display" : ""
-                  }`}
-                >
-                  Satın Al
-                </button>
-              </Link>
+
+              <button
+                className={`card__button largeButton${
+                  // Tıklanmaya göre butonun gösterilmesi.
+                  display ? " display" : ""
+                }`}
+              >
+                Satın Al
+              </button>
             </div>
           </div>
         </div>
@@ -165,14 +168,10 @@ export default function Card({ name, description, image, cardId, time }) {
                   </div>
                 </div>
               </div>
-              <Link to="/order-completed">
-                <button
-                  className="card__button2 largeButton"
-                  onClick={getOrder}
-                >
-                  Satın Al
-                </button>
-              </Link>
+
+              <button className="card__button2 largeButton" onClick={getOrder}>
+                Satın Al
+              </button>
             </div>
           </div>
         </div>

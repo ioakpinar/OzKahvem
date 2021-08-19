@@ -5,6 +5,7 @@ import Products from "./pages/Products";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Orders from "./pages/Orders";
 import OrderCompleted from "./pages/OrderCompleted";
+import OrderNo from "./pages/OrderNo";
 import { TimeProvider } from "./contexts/TimeContext";
 
 function App() {
@@ -17,10 +18,15 @@ function App() {
           {/* path kullanarak url'mizi belirliyoruz */}
           {/* component kullanarak sayfanın yüklemesi gereken componenti çağırıyoruz */}
           <Route path="/" component={Home} exact />
-          <Route path="/products" component={Products} />
-          <Route path="/orders" component={Orders} />
+          <Route path="/products" component={Products} exact />
+          <Route path="/orders" component={Orders} exact />
+          <Route path="/order-no/:orderId" component={OrderNo} exact />
           <TimeProvider>
-            <Route path="/order-completed" component={OrderCompleted} />
+            <Route
+              path="/order-completed/:oid/:timeleft"
+              component={OrderCompleted}
+              exact
+            />
           </TimeProvider>
         </Switch>
       </Router>

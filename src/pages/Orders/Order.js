@@ -22,6 +22,7 @@ export default function Order({
       requestOptions
     );
     const data = await response.json();
+    document.location.reload(true);
   };
 
   return (
